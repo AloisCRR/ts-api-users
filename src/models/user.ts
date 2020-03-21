@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 export interface Iuser extends Document {
   email: string;
   password: string;
+  comparePass: (pass: string) => Promise<boolean>;
 }
 
 const userSchema = new Schema({
