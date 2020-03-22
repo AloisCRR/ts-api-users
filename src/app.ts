@@ -4,6 +4,7 @@ import cors from 'cors'
 import authRoutes from './routes/auth.routes';
 import passport from 'passport';
 import passportTokenAuth from './middlewares/passport';
+import authonly from './routes/private.routes';
 
 // Start
 const app = express();
@@ -18,9 +19,10 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
-app.use(authRoutes);
 app.use(passport.initialize());
 passport.use(passportTokenAuth);
+app.use(authRoutes);
+app.use(authonly);
 
 // Routes
 
