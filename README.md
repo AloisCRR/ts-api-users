@@ -1,130 +1,162 @@
-## Project in self
+# TypeScript API with authentication
 
-API made with Typescript, MongoDB and JsonWebToken as main technologies.  
-This API has an **no-sesion** authentication, made by passport-jwt, for endpoints. Based on **MVC** architecture.
+This project purpose is to learn about JWT auth flow, using TypeScript.
 
-## To start
+## Run Locally
 
-### `npm install`  
+1. Install both:
 
-To install all dependencies before run any other script.
+   - [Node.js](https://nodejs.org/es/download/)
+   - [MongoDB](https://www.mongodb.com/try/download/community)
 
-### `npm run dev`  
+   You will need to have MongoDB running on port 27017.
 
-Script automatically compiles tsc and watch for changes. Only runs 1 time.
+2. Clone the project:
 
-### `npm run build`
+   ```bash
+   git clone https://github.com/AloisCRR/jwt-api-users-auth.git
+   ```
 
-Compiles tsc code (this is more for production)
+3. Go to the project directory:
 
-### `npm start`
+   ```bash
+   cd jwt-api-users-auth
+   ```
 
-Starts project after `npm run build`
+4. Install dependencies:
 
-After that, you can open the project in...
-``` javascript
-http://localhost:3000
+   ```bash
+   npm install
+   ```
+
+5. Start the dev server:
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+6. To compile TypeScript to JavaScript and run the project:
+
+   ```bash
+   npm run build && npm start
+   ```
+
+## API Reference
+
+#### Sign up or register
+
+```http
+POST /signup
 ```
-Or you can define a port in eviroment variables...
-``` javascript
-app.set('port',process.env.port || 3000);
+
+| Body       | Type     | Description                      |
+| :--------- | :------- | :------------------------------- |
+| `email`    | `string` | **Required**. User email address |
+| `password` | `string` | **Required**. Account password   |
+
+#### Sign in or login
+
+```http
+POST /signin
 ```
+
+| Body       | Type     | Description                      |
+| :--------- | :------- | :------------------------------- |
+| `email`    | `string` | **Required**. User email address |
+| `password` | `string` | **Required**. Account password   |
+
+```http
+GET /auth
+```
+
+| Headers          | Type  | Description                                   |
+| :--------------- | :---- | :-------------------------------------------- |
+| `Authentication` | `JWT` | **Required**. Jwt gived on sign in or sign up |
 
 ## Screenshots
 
-- Fields validation
-<p align='center'>
-<img src='https://i.imgur.com/JQD2vth.png' alt='final-project-image'>
-</p>
+Basic input validation
 
-- Invalid password or email
-<p align='center'>
-<img src='https://i.imgur.com/B8Mzqk5.png' alt='final-project-image'>
-</p>
+![Screenshot](https://i.imgur.com/JQD2vth.png)
 
-- Successful sign in
-<p align='center'>
-<img src='https://i.imgur.com/hJoFb4B.png' alt='final-project-image'>
-</p>
+Invalid password or email
 
-- Sending token on headers
+![Screenshot](https://i.imgur.com/B8Mzqk5.png)
 
-<p align='center'>
-<img src='https://i.imgur.com/5r0cAo0.png' alt='final-project-image'>
-</p>
+Successful sign in
 
-- Authorization
+![Screenshot](https://i.imgur.com/hJoFb4B.png)
 
-<p align='center'>
-<img src='https://i.imgur.com/jcTFWIB.png' alt='final-project-image'>
-</p>
+Sending token on headers
 
-## Tutorials
+![Screenshot](https://i.imgur.com/5r0cAo0.png)
 
-- [JsonWebTokens #1](https://www.youtube.com/watch?v=qckBlIfOnlA)
-- [JsonWebTokens #2](https://www.youtube.com/watch?v=mbsmsi7l3r4)
-- [JsonWebTokens #3](https://www.youtube.com/watch?v=7nafaH9SddU)
-- [Passport JWT Strategy Flow](https://www.youtube.com/watch?v=o6mSdG09yOU)
+Authorization
 
-## Explication
+![Screenshot](https://i.imgur.com/jcTFWIB.png)
 
-#### Route creation
+## Tech Stack
 
-``` javascript
-import { Router } from 'express';
-import { signIn, signUp } from '../controllers/user.controller';
+| Name                                                       | Description                                                 |
+| ---------------------------------------------------------- | ----------------------------------------------------------- |
+| [Node.js](https://nodejs.org/es/download/)                 | Business logic                                              |
+| [MongoDB](https://www.mongodb.com/try/download/community)  | Database                                                    |
+| [Express](https://expressjs.com/es/api.html)               | HTTP Server                                                 |
+| [TypeScript](https://www.typescriptlang.org/)              | JavaScript super-set to add static code analysis            |
+| [JWT](https://jwt.io/)                                     | Library to generate JWTs                                    |
+| [Mongoose](https://mongoosejs.com/docs/api.html)           | ODM (Object Data Modeling)                                  |
+| [Passport JWT](https://www.npmjs.com/package/passport-jwt) | Passport strategy for authenticating with a JSON Web Token. |
+| [Bcrypt](https://www.npmjs.com/package/passport-jwt)       | Passport strategy for authenticating with a JSON Web Token. |
+
+## Lessons Learned
+
+### Route creation
+
+```typescript
+import { Router } from "express";
+import { signIn, signUp } from "../controllers/user.controller";
 
 const router = Router();
 
-router.post('/signup',signUp);
-router.post('/signin', signIn);
+router.post("/signup", signUp);
+router.post("/signin", signIn);
 
 export default router;
 ```
 
-#### Route controller
+### Route controller
 
-``` javascript
-router.get('/auth', passport.authenticate('jwt', {session: false}), (req, res) => {
-    res.status(200).json({msg: "Auth route succeeded"})
-})
+```typescript
+router.get(
+  "/auth",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.status(200).json({ msg: "Auth route succeeded" });
+  }
+);
 ```
 
-#### Create token
+### Create token
 
-``` javascript
-function createToken(user:Iuser) {
-    return jwt.sign({id: user.id, email:user.email}, config.jwtSecret, {
-        expiresIn: 86400
-    })
+```typescript
+function createToken(user: Iuser) {
+  return jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, {
+    expiresIn: 86400,
+  });
 }
 ```
 
-Works in this way... With JWT obviously you can generate a token for authentication, a token have some public and private information. Public info is like the algorith used to sign token or the type of token, also included something called "payload" wich is content or body of token (this includes all data registered for token).
+Works in this way... With JWT obviously you can generate a token for authentication, a token can hold public data in a stateless way. Public info is like the algorithm used to sign token or the type of token, also included something called "payload" which is content or body of token (this includes all data registered for token).
 
-To generate a token we use a function from jwt moduled sign, passing a "payload" that is information of token, and a secret used to sign token.
+To generate a token we use a function from jwt module called sign, passing a "payload" that is information that token will save, and a secret used to sign the token.
 
-Token is signed by a private key, and it is used to "decrypt" it and use to auth, passport takes his time in this, with passport-jwt we can use a function called passport.authenticate() and thats it.
+Token is signed by a private key, and with the same key we can check if token is valid and use it to authenticate an user, passport takes his time in this, with passport-jwt we can use a function called passport.authenticate() which is a middleware that handles all the logic from getting the token from auth header to validate it and attach the token payload to the request object of express.
 
+## Roadmap
 
-## Architecture
-
-- [MVC](https://si.ua.es/es/documentacion/asp-net-mvc-3/1-dia/modelo-vista-controlador-mvc.html)
-
-## Modules used
-
-- [bcrypt](https://github.com/kelektiv/node.bcrypt.js)
-
-- [cors](https://github.com/expressjs/cors)
-
-- [express](https://github.com/expressjs/express)
-
-- [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
-
-- [mongoose](https://github.com/Automattic/mongoose)
-
-- [morgan](https://github.com/expressjs/morgan)
-
-- [passport](https://github.com/jaredhanson/passport)
-
-- [passport-jwt](https://github.com/mikenicholson/passport-jwt)
+- [x] App functionality
+- [ ] Testing
+- [ ] Hosting, domain, etc.
+- [ ] CI/CD
