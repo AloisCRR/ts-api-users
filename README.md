@@ -14,13 +14,13 @@ This project purpose is to learn about JWT auth flow, using TypeScript.
 2. Clone the project:
 
    ```bash
-   git clone https://github.com/AloisCRR/jwt-api-users-auth.git
+   git clone https://github.com/AloisCRR/ts-api-users.git
    ```
 
 3. Go to the project directory:
 
    ```bash
-   cd jwt-api-users-auth
+   cd ts-api-users
    ```
 
 4. Install dependencies:
@@ -35,7 +35,7 @@ This project purpose is to learn about JWT auth flow, using TypeScript.
    npm run dev
    ```
 
-   Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+   REST API will run in [http://localhost:3000](http://localhost:3000).
 
 6. To compile TypeScript to JavaScript and run the project:
 
@@ -73,7 +73,7 @@ GET /auth
 
 | Headers          | Type  | Description                                   |
 | :--------------- | :---- | :-------------------------------------------- |
-| `Authentication` | `JWT` | **Required**. Jwt gived on sign in or sign up |
+| `Authentication` | `JWT` | **Required**. Jwt given on sign in or sign up |
 
 ## Screenshots
 
@@ -108,7 +108,7 @@ Authorization
 | [JWT](https://jwt.io/)                                     | Library to generate JWTs                                    |
 | [Mongoose](https://mongoosejs.com/docs/api.html)           | ODM (Object Data Modeling)                                  |
 | [Passport JWT](https://www.npmjs.com/package/passport-jwt) | Passport strategy for authenticating with a JSON Web Token. |
-| [Bcrypt](https://www.npmjs.com/package/passport-jwt)       | Passport strategy for authenticating with a JSON Web Token. |
+| [Bcrypt](https://www.npmjs.com/package/passport-jwt)       | Algorithm used to hash passwords.                           |
 
 ## Lessons Learned
 
